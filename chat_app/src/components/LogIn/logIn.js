@@ -1,13 +1,17 @@
-import { useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 //Components
 import './logIn.css';
 //FireBase
 import db from '../../fireBase';
+import {collection, addDoc, getDocs, query, where} from 'firebase/firestore';
+import { Link, Navigate } from 'react-router-dom';
+import UserContext from '../context/userProvider';
 
 function LogIn() {
-    const [user, setUser] = useState({name: "", password: ""});
+    const {setUser} = useContext(UserContext);
     const [userName, setUserName] = useState("");
     const [userPassword, setUserPassword] = useState("");
+    const [validData, setValidData] = useState(false);
 
     const handleSetName = (e) => {
         setUserName(e.target.value);
@@ -17,14 +21,37 @@ function LogIn() {
         setUserPassword(e.target.value);
     }
     
-    const handleSetUser = async (e) => {
+
+    const validateUser = async (e)=>{
         e.preventDefault();
-        // busccar nueva manera firebase
+
+        const usersRef = collection(db, "User");
+        const q =  query(usersRef, where("name", "==", userName), where("password", "==", userPassword));
+        
+        const snapshoot = await getDocs(q);
+        
+        if(snapshoot.empty === false)
+        {
+            snapshoot.forEach( (doc) => {
+              setUser(doc.data());
+              console.log(doc.data());
+            });
+            
+            setValidData(true)
+        }
+        else
+        {
+            console.log("Los datos son incorrectos");
+            setValidData(false);
+        }
     }
 
   return (
     <div className="logIn-container">
-      <form className='form' onSubmit={handleSetUser}>
+      {
+         validData && <Navigate to={"/home"} />
+      }
+      <form className='form' onSubmit={validateUser}>
             <input 
                 type="text" 
                 className='input-name' 
@@ -39,6 +66,9 @@ function LogIn() {
                 value={userPassword}
                 onChange={handleSetPassword}
             />
+            <Link to={"/SignIn"}>
+                Registrarse
+            </Link>
             <button type="submit">Enviar</button>
       </form>
     </div>
