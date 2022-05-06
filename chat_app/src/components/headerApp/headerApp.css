@@ -1,0 +1,16 @@
+.home-header{
+    padding: 10px 20px;
+    background: #ccc;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.header-title{
+    margin: 0;
+}
+
+.home-header .header-plus,
+.home-header .header-arrow{
+    text-decoration: none;
+}

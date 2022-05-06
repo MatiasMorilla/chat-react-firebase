@@ -3,12 +3,16 @@ import { createContext, useState } from "react";
 const UserContext = createContext();
 
 const UserProvider = ({children}) => {
-    const [user, setUser] = useState({name: "", password: ""});
+    const [user, setUser] = useState({name: "", password: "", friendsList: []});
 
+    const addFriend = (friend) => {
+        user.friendsList.push(friend);
+    }
 
     const data = {
         user,
-        setUser
+        setUser,
+        addFriend
     }
 
     return(
