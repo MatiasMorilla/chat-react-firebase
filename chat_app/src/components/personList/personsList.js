@@ -7,10 +7,11 @@ import HeaderApp from '../headerApp/headerApp';
 import { collection, getDocs } from 'firebase/firestore';
 import db from '../../fireBase';
 import ItemFriend from '../itemFriend/itemFriend';
+import { Divider } from '@mui/material';
 
 
 const PersonsList = () => {
-    const {user} = useContext(UserContext);
+    const {user, addFriend} = useContext(UserContext);
     const [personList, setPersonList] = useState([]);
 
     const getPersons = async () => {
