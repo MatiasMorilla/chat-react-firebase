@@ -33,6 +33,8 @@ const PersonsList = () => {
         getPersons();
     }, []);
 
+    console.log(user.friendsList);
+    console.log(user.name);
   return (
     <div className="persons-container">
         <HeaderApp arrow_path="/home" title="Agregar amigos"/>
@@ -40,7 +42,7 @@ const PersonsList = () => {
             {
               personList.map( (value, index) =>{
                   return(
-                      <ItemFriend key={index} name={value.name}/>
+                      <ItemFriend key={index} name={value.name} addFriend={addFriend}/>
                   )
               })
             }

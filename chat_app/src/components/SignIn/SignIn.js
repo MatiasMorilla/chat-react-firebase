@@ -39,7 +39,8 @@ const SignIn = () => {
         {
             const docRef = await addDoc(collection(db, "User"),{
                 name: userName,
-                password: userPassword
+                password: userPassword,
+                friendsList: []
             });
 
             setValidData(true);
@@ -52,10 +53,7 @@ const SignIn = () => {
         }
     }
 
-/*     useEffect( () => {
-        searchUser("Matias");
-    }, []);
- */
+
     return (
         <div className="signIn-container">
             {
