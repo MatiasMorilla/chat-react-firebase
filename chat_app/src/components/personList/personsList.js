@@ -8,14 +8,13 @@ import ItemFriend from '../itemFriend/itemFriend';
 
 
 const PersonsList = () => {
-    const {user, addFriend, getUsersWithoutFriends, userList} = useContext(UserContext);
+    const {user, addFriend, getUsersWithoutAUF, userList} = useContext(UserContext);
 
     useEffect( () => {
-        getUsersWithoutFriends();
+      getUsersWithoutAUF();
     }, []);
 
-    console.log(user.friendsList);
-    console.log(user.name);
+
   return (
     <div className="persons-container">
         <HeaderApp arrow_path="/home" title="Agregar amigos"/>
@@ -23,7 +22,7 @@ const PersonsList = () => {
             {
               userList.map( (value, index) =>{
                   return(
-                      <ItemFriend key={index} name={value.name} addFriend={addFriend}/>
+                      <ItemFriend key={index} name={value.name} addFriend={addFriend} addOrdelete="add"/>
                   )
               })
             }

@@ -10,7 +10,6 @@
     padding: 10px 20px;
 }
 
-/* .itemFriend-container .divider{
-    width: 90%;
-    margin: 0 auto;
-} */
+.itemFriend-container.added{
+   display: none;
+}

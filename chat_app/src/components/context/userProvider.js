@@ -6,7 +6,7 @@ import db from '../../fireBase';;
 const UserContext = createContext();
 
 const UserProvider = ({children}) => {
-    const [user, setUser] = useState({name: "", password: "", friendsList: [{}]});
+    const [user, setUser] = useState({id: "", name: "", password: "", friendsList: []});
     const [existUser, setExistUser] = useState(true);
     const [validDataSI, setValidDataSI] = useState(false);
     const [validDataLI, setValidDataLI] = useState(false);
@@ -21,7 +21,7 @@ const UserProvider = ({children}) => {
         snapShot.empty == true ? setExistUser(false) : setExistUser(true);
     } 
 
-    const addUser = async (userName, userPassword, friendsList = [{}]) => {
+    const addUser = async (userName, userPassword, friendsList = []) => {
         searchUser(userName);
 
         if(!existUser)
@@ -32,6 +32,8 @@ const UserProvider = ({children}) => {
                 friendsList: friendsList
             });
 
+            updateDoc(docRef, {id: docRef.id});
+
             setValidDataSI(true);
             console.log("funciono", docRef.id);
         }
@@ -40,6 +42,7 @@ const UserProvider = ({children}) => {
             setValidDataSI(false);    
             console.log("Ese usuario ya existe");
         }
+
     }
 
     const validateUser = async (userName, userPassword) => {
@@ -69,7 +72,10 @@ const UserProvider = ({children}) => {
 
         let snapshoot = await getDocs(q);
         snapshoot.forEach( (doc) => {
-            userFriend = doc.data();
+            userFriend = {
+                id: doc.id,
+                name: doc.data().name
+            }
         });
 
         user.friendsList.push(userFriend);
@@ -79,7 +85,7 @@ const UserProvider = ({children}) => {
         let snapshoot2 = await getDocs(q2);
         snapshoot2.forEach( (document) => {
             let userActualref = doc(db, "User", `${document.id}`);
-            updateDoc(userActualref, {friendsList: userFriend});
+            updateDoc(userActualref, {friendsList: user.friendsList});
         });
 
     }
@@ -95,19 +101,35 @@ const UserProvider = ({children}) => {
         setUserList(arrayPersons);
       }
 
-    const getUsersWithoutFriends = async () => {
+    // Obtiene todos los usuarios excepto al usuario actual y sus amigos 
+    const getUsersWithoutAUF = async () => {
         let snapshoot = await getDocs(userRef);
         let arrayPersons = [];
-  
+
         snapshoot.forEach( (doc) => {
-            if(doc.data().name !== user.name)
+            if(doc.data().name !== user.name && !existFriend(doc.data().name))
             {
                 arrayPersons.push(doc.data());
             }
         });
-  
+        
         setUserList(arrayPersons);
       }
+
+    const existFriend =  (friendName) => 
+    {
+        let exist = false;
+
+        for(let friend of user.friendsList)
+        {
+            if(friend.name === friendName)
+            {
+                exist = true;
+            }
+        }
+
+        return exist;
+    }
 
     const data = {
         user,
@@ -120,7 +142,7 @@ const UserProvider = ({children}) => {
         validateUser,
         addFriend,
         getUsers,
-        getUsersWithoutFriends,
+        getUsersWithoutAUF,
         userList
     }
 
