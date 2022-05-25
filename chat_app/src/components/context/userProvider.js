@@ -45,6 +45,20 @@ const UserProvider = ({children}) => {
 
     }
 
+    const getUserFriend = (friendName) => {
+        let userFriend = {};
+
+        for(let friend of user.friendsList)
+        {
+            if(friend.name === friendName)
+            {
+                userFriend = friend
+            }
+        }
+
+        return userFriend;
+    }
+
     const validateUser = async (userName, userPassword) => {
         const q =  query(userRef, where("name", "==", userName), where("password", "==", userPassword));
         
@@ -79,15 +93,26 @@ const UserProvider = ({children}) => {
         });
 
         user.friendsList.push(userFriend);
-        console.log(user.friendsList);
 
         let q2 = query(userRef, where("name", "==", user.name));
         let snapshoot2 = await getDocs(q2);
         snapshoot2.forEach( (document) => {
             let userActualref = doc(db, "User", `${document.id}`);
             updateDoc(userActualref, {friendsList: user.friendsList});
+            addChat(document.id, userFriend.id);
         });
 
+    }
+
+    const addChat = async (idUser1, idUser2) => {
+        let chatsRef = collection(db, "Chats");
+        let docRef = await addDoc(chatsRef, {
+            idUser1: idUser1,
+            idUser2: idUser2,
+            messagesList: []
+        })
+
+        console.log("funciono", docRef.id);
     }
 
     const getUsers = async () => {
@@ -139,6 +164,7 @@ const UserProvider = ({children}) => {
         validDataLI,
         searchUser,
         addUser,
+        getUserFriend,
         validateUser,
         addFriend,
         getUsers,
