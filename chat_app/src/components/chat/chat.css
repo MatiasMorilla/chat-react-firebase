@@ -1,5 +1,5 @@
 .chat-container{
-    overflow-y: hidden;
+    overflow-y: scroll;
     height: 100vh;
 }
 
@@ -30,4 +30,16 @@
     background: #fff;
     border: none;
     outline: none;
+}
+
+.chat-container .chat ul{
+    padding-left: 10px;
+    width: 50%;
+}
+
+.chat-container .chat .message{
+    list-style: none;
+    background: #ccc;
+    padding: 5px 10px;
+    display: inline-block;
 }

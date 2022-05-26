@@ -13,6 +13,8 @@ const UserProvider = ({children}) => {
     const [userList, setUserList] = useState([]);
     const userRef = collection(db, "User");
 
+    // Busca un usuario a traves del su nombre y luego setea 
+    // una variable de estado en true o false dependiendo si existe o no
     const searchUser = async (userName) => {
         let q = query(userRef, where("name", "==", userName));
 
@@ -21,6 +23,7 @@ const UserProvider = ({children}) => {
         snapShot.empty == true ? setExistUser(false) : setExistUser(true);
     } 
 
+    // Agrega un usuario a la base de datos
     const addUser = async (userName, userPassword, friendsList = []) => {
         searchUser(userName);
 
@@ -45,6 +48,7 @@ const UserProvider = ({children}) => {
 
     }
 
+    // Obtiene el usuario desde la lista de amigo a traves del nombre
     const getUserFriend = (friendName) => {
         let userFriend = {};
 
@@ -59,6 +63,7 @@ const UserProvider = ({children}) => {
         return userFriend;
     }
 
+    // Valida que el nombre y la contraseña sean correctos
     const validateUser = async (userName, userPassword) => {
         const q =  query(userRef, where("name", "==", userName), where("password", "==", userPassword));
         
@@ -80,41 +85,42 @@ const UserProvider = ({children}) => {
         }
     }
 
+    // Agrega un usuario a la lista de amigos y inicializa un chat
     const addFriend = async (name) => {
         let q = query(userRef, where("name", "==", name));
         let userFriend = {};
 
         let snapshoot = await getDocs(q);
-        snapshoot.forEach( (doc) => {
+        snapshoot.forEach( (document) => {
             userFriend = {
-                id: doc.id,
-                name: doc.data().name
+                id: document.id,
+                name: document.data().name,
+                friendsList: document.data().friendsList
             }
+
+            userFriend.friendsList.push({id: user.id, name: user.name});
+            let userFriendRef = doc(db, "User", userFriend.id);
+            updateDoc(userFriendRef, {friendsList: userFriend.friendsList})
         });
 
-        user.friendsList.push(userFriend);
-
-        let q2 = query(userRef, where("name", "==", user.name));
-        let snapshoot2 = await getDocs(q2);
-        snapshoot2.forEach( (document) => {
-            let userActualref = doc(db, "User", `${document.id}`);
-            updateDoc(userActualref, {friendsList: user.friendsList});
-            addChat(document.id, userFriend.id);
-        });
-
+        user.friendsList.push({id: userFriend.id, name: userFriend.name}); 
+        let userActualref = doc(db, "User", user.id); // Obtenemos la referencia del usaurio actual de la bd
+        updateDoc(userActualref, {friendsList: user.friendsList}); // Agregamos el usuario a lista de amigos
+        addChat(user.id, userFriend.id);  // Inicializamos el chat
     }
 
+    // Inicializa un chat con una amigo
     const addChat = async (idUser1, idUser2) => {
         let chatsRef = collection(db, "Chats");
         let docRef = await addDoc(chatsRef, {
-            idUser1: idUser1,
-            idUser2: idUser2,
+            users: [idUser1, idUser2],
             messagesList: []
         })
 
         console.log("funciono", docRef.id);
     }
 
+    // Obtiene todos los usuarios de la bd
     const getUsers = async () => {
         let snapshoot = await getDocs(userRef);
         let arrayPersons = [];
@@ -141,6 +147,7 @@ const UserProvider = ({children}) => {
         setUserList(arrayPersons);
       }
 
+    // Comprueba si existe un usuario en la lista de amigos a traves de su nombre
     const existFriend =  (friendName) => 
     {
         let exist = false;

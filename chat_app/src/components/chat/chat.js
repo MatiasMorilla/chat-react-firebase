@@ -16,38 +16,50 @@ const Chat = () => {
     const {friendName} = useParams();
     const {user, getUserFriend} = useContext(UserContext);
     const userFriend = getUserFriend(friendName);
-    const [chat, setChat] = useState({idUser1: "", idUser2: "", messagesList: []})
+    const [chat, setChat] = useState({users: [], messagesList: []})
     const [message, setMessage] = useState("");
 
+    // Obtenemos la referencia del chat
+    // Y comprobamos que sea el chat de los dos usuarios seleccionados
     const getChat = async () => {
-        let chatsRef = collection(db, "Chats");
-        let q = query(chatsRef, where("idUser1", "==", user.id), where("idUser2", "==", userFriend.id));
+        let chatsRef = collection(db, "Chats"); 
+        let q = query(chatsRef, where("users", "array-contains", user.id)); 
         let snapshoot = await getDocs(q);
         snapshoot.forEach( (doc) => {
-            setChat(doc.data());
+            if(doc.data().users.includes(userFriend.id))
+            {
+                setChat(doc.data());
+                console.log(doc.data())
+            }
         });
     }
 
+    // Actualiza cada mensaje en la bd
     const updateChatFirebase = async () => {
         let chatsRef = collection(db, "Chats");
-        let q = query(chatsRef, where("idUser1", "==", user.id), where("idUser2", "==", userFriend.id));
+        let q = query(chatsRef, where("users", "array-contains", user.id));
         let snapshoot = await getDocs(q);
         snapshoot.forEach( (document) => {
-            let chatRef = doc(db, "Chats", document.id);
-            updateDoc(chatRef, {messagesList: chat.messagesList}); 
+            if(document.data().users.includes(userFriend.id))
+            {
+                let chatRef = doc(db, "Chats", document.id);
+                updateDoc(chatRef, {messagesList: chat.messagesList}); 
+            }
         });
     }
 
+    // Crea un nuevo mensaje, setea la variable de estado chat con la nueva informacion y actualiza la bd
     const handleOnSubmit = (e) => {
         e.preventDefault();
         let list = chat.messagesList;
         let newMessage = {
             id: chat.messagesList.length,
-            text: message
+            text: message,
+            userId: user.id
         }
 
         list.push(newMessage);
-        setChat({idUser1: chat.idUser1, isUser2: chat.idUser2, messagesList: list});
+        setChat({users: [chat.users[0], chat.users[1]], messagesList: list});
         setMessage("");
         updateChatFirebase();
     }
@@ -55,9 +67,6 @@ const Chat = () => {
     const handleMessage = (e) => {
         setMessage(e.target.value);
     }
-
-
-    
 
     useEffect( () => {
         getChat();
@@ -72,7 +81,12 @@ const Chat = () => {
                     {
                         chat.messagesList.map( (message) => {
                             return(
-                                <li key={message.id}>{message.text}</li>
+                                <li 
+                                    key={message.id}
+                                    className={`message ${message.userId === user.id ? "rigth" : "left"}`}
+                                >
+                                    {message.text}
+                                </li>
                             );
                         })
                     }
