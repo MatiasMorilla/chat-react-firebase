@@ -3,6 +3,10 @@ import { useContext, useEffect, useState } from 'react';
 import './logIn.css';
 import { Link, Navigate } from 'react-router-dom';
 import UserContext from '../context/userProvider';
+// MUI
+import { Button, TextField } from '@mui/material';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import LockIcon from '@mui/icons-material/Lock';
 
 function LogIn() {
     const {validateUser, validDataLI} = useContext(UserContext);
@@ -30,24 +34,40 @@ function LogIn() {
          validDataLI && <Navigate to={"/home"} />
       }
       <form className='form' onSubmit={handleValidateUser}>
-            <input 
-                type="text" 
-                className='input-name' 
-                placeholder='Ingrese su nombre'
-                value={userName}
-                onChange={handleSetName}
-            />
-            <input 
-                type="password" 
-                className='input-password' 
-                placeholder='Ingrese su contrasena' 
-                value={userPassword}
-                onChange={handleSetPassword}
-            />
-            <Link to={"/SignIn"}>
-                Registrarse
-            </Link>
-            <button type="submit">Enviar</button>
+            <div className='input-container'>
+                <AccountCircleIcon />
+                <TextField 
+                    type="text" 
+                    className='input-name' 
+                    label="Nombre de usuario"
+                    value={userName}
+                    onChange={handleSetName}
+                    variant="standard"
+                    id="standard-basic"
+                />
+            </div>
+            <div className='input-container'>
+                <LockIcon />
+                <TextField 
+                    type="password" 
+                    className='input-password' 
+                    label="Contraseña" 
+                    value={userPassword}
+                    onChange={handleSetPassword}
+                    variant="standard"
+                    id="standard-basic"
+                />
+            </div>
+            <div className='links-container'>
+                <Button variant='contained'>
+                    <Link to={"/SignIn"}>
+                        Registrarse
+                    </Link>
+                </Button>
+                <Button type="submit" variant='contained'>
+                    Enviar
+                </Button>
+            </div>
       </form>
     </div>
   );

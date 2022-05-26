@@ -81,12 +81,14 @@ const Chat = () => {
                     {
                         chat.messagesList.map( (message) => {
                             return(
-                                <li 
-                                    key={message.id}
-                                    className={`message ${message.userId === user.id ? "rigth" : "left"}`}
+                                <div 
+                                    className={`li-container ${message.userId === user.id ? "rigth" : ""}`} 
+                                    key={message.id} 
                                 >
-                                    {message.text}
-                                </li>
+                                    <li className={`message ${message.userId === user.id ? "rigth" : "left"}`}>
+                                        {message.text}
+                                    </li>
+                                </div>
                             );
                         })
                     }
