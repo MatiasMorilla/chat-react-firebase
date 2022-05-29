@@ -1,7 +1,8 @@
 import { createContext, useState } from "react";
 // Firebase
 import { collection, query, where, getDocs, addDoc, updateDoc, doc} from 'firebase/firestore';
-import db from '../../fireBase';;
+import db from '../../fireBase';
+import { getDatabase, set, ref, update  } from "firebase/database";
 
 const UserContext = createContext();
 
@@ -12,6 +13,7 @@ const UserProvider = ({children}) => {
     const [validDataLI, setValidDataLI] = useState(false);
     const [userList, setUserList] = useState([]);
     const userRef = collection(db, "User");
+    const databaseRT = getDatabase();
 
     // Busca un usuario a traves del su nombre y luego setea 
     // una variable de estado en true o false dependiendo si existe o no
@@ -116,7 +118,10 @@ const UserProvider = ({children}) => {
             users: [idUser1, idUser2],
             messagesList: []
         })
-
+        updateDoc(docRef, {id: docRef.id});
+        set(ref(databaseRT,"chats/" + docRef.id ), {lastMessage: "", timestamp: -1});
+        set(ref(databaseRT,"members/" + docRef.id ), {idUser1: {id: idUser1, state: true}, idUser2: {id: idUser2, state: true}});
+        set(ref(databaseRT,"messages/" + docRef.id ), {0: {name: "", lastMessage: "", timestamp: -1}});
         console.log("funciono", docRef.id);
     }
 

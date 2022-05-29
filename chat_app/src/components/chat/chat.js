@@ -11,12 +11,14 @@ import { doc, collection, getDocs, query, updateDoc, where } from 'firebase/fire
 import db from '../../fireBase';
 // Context
 import UserContext from '../context/userProvider';
+import { getDatabase, onValue, ref } from 'firebase/database';
 
 const Chat = () => {
     const {friendName} = useParams();
     const {user, getUserFriend} = useContext(UserContext);
     const userFriend = getUserFriend(friendName);
-    const [chat, setChat] = useState({users: [], messagesList: []})
+    const [chat, setChat] = useState({id: "", users: [], messagesList: []})
+    const [messagesList, setMessageList] = useState([]);
     const [message, setMessage] = useState("");
 
     // Obtenemos la referencia del chat
@@ -29,8 +31,17 @@ const Chat = () => {
             if(doc.data().users.includes(userFriend.id))
             {
                 setChat(doc.data());
-                console.log(doc.data())
+                getChatRT();
             }
+        });
+    }
+
+    const getChatRT =  () => {
+        let databaseRT = getDatabase();
+        let chatRef = ref(databaseRT, "messages/" + chat.id);
+        onValue(chatRef, (snapshot) => {
+            let data = snapshot.val();
+            setMessageList(data);
         });
     }
 
@@ -71,6 +82,7 @@ const Chat = () => {
     useEffect( () => {
         getChat();
         console.log(chat);
+        console.log("meassa", messagesList);
     }, []); 
 
     return (
@@ -79,14 +91,14 @@ const Chat = () => {
             <div className='chat'>
                 <ul>
                     {
-                        chat.messagesList.map( (message) => {
+                        chat.messagesList.map( (message, index) => {
                             return(
                                 <div 
                                     className={`li-container ${message.userId === user.id ? "rigth" : ""}`} 
-                                    key={message.id} 
+                                    key={index} 
                                 >
                                     <li className={`message ${message.userId === user.id ? "rigth" : "left"}`}>
-                                        {message.text}
+                                        {message.message}
                                     </li>
                                 </div>
                             );
