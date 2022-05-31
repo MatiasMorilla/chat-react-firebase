@@ -119,9 +119,7 @@ const UserProvider = ({children}) => {
             messagesList: []
         })
         updateDoc(docRef, {id: docRef.id});
-        set(ref(databaseRT,"chats/" + docRef.id ), {lastMessage: "", timestamp: -1});
         set(ref(databaseRT,"members/" + docRef.id ), {idUser1: {id: idUser1, state: true}, idUser2: {id: idUser2, state: true}});
-        set(ref(databaseRT,"messages/" + docRef.id ), {0: {name: "", lastMessage: "", timestamp: -1}});
         console.log("funciono", docRef.id);
     }
 

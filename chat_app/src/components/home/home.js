@@ -20,7 +20,7 @@ const Home = () => {
                   key={friend.id} 
                   className="home-link"
                 >
-                    <ItemFriend  name={friend.name} className={"home-itemFriend"} />
+                    <ItemFriend  className={"home-itemFriend"} name={friend.name} />
                 </Link>
               );
             })

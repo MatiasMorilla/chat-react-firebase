@@ -4,12 +4,40 @@
 }
 
 .itemFriend-container .user-info{
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
     padding: 10px 20px;
+    display: grid;
+    grid-template-columns: 3fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    grid-template-areas: "name date"
+                         "lastMsg btn";
 }
 
 .itemFriend-container.added{
    display: none;
+}
+
+.user-info p{
+    margin: 0;
+    padding: 0;
+    color:#000;
+}
+
+.user-info .name{
+    grid-area: name;
+}
+
+.user-info .date{
+    grid-area:date;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.user-info .lastMsg{
+    grid-area: lastMsg;
+    color:#7b7b7b;
+}
+
+.user-info .itemFriend-btn{
+    grid-area: btn;
 }
