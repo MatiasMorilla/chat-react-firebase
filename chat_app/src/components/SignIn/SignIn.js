@@ -3,6 +3,10 @@ import { useContext, useEffect, useState } from "react";
 import { Navigate } from "react-router";
 // Context
 import UserContext from "../context/userProvider";
+// MUI
+import { Button, TextField } from "@mui/material";
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import LockIcon from '@mui/icons-material/Lock';
 
 const SignIn = () => {
     const [userName, setUserName] = useState("");
@@ -30,19 +34,35 @@ const SignIn = () => {
                 validDataSI && <Navigate to={"/"} />
             }
             <form className="form" onSubmit={handleAddUser}>
-                <input 
-                    type="text" 
-                    placeholder="nombre de usuario"
-                    value={userName}
-                    onChange={handleSetName}
-                />
-                <input 
-                    type="password" 
-                    placeholder="cree una contraseña"
-                    value={userPassword}
-                    onChange={handleSetPassword}
-                />
-                <button type="submit">Registrarse</button>
+                <div className='input-container'>
+                    <AccountCircleIcon />
+                    <TextField 
+                        type="text" 
+                        className='input-name' 
+                        label="Nombre de usuario"
+                        value={userName}
+                        onChange={handleSetName}
+                        variant="standard"
+                        id="standard-basic"
+                    />
+                </div>
+                <div className='input-container'>
+                    <LockIcon />
+                    <TextField 
+                        type="password" 
+                        className='input-password' 
+                        label="Contraseña" 
+                        value={userPassword}
+                        onChange={handleSetPassword}
+                        variant="standard"
+                        id="standard-basic"
+                    />
+                </div>
+                <div className='links-container'>
+                    <Button type="submit" variant='contained'>
+                        Enviar
+                    </Button>
+                </div>
             </form>
         </div>
     );

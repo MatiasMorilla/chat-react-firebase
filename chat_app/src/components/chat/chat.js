@@ -47,8 +47,6 @@ const Chat = () => {
 
     // Actualiza cada mensaje en la bd
     const updateChatFirebase = () => {
-        console.log(chat);
-
         let lastMessage = chat.messagesList[chat.messagesList.length - 1];
         let chatRef = doc(db, "Chats", chat.id);
         updateDoc(chatRef, {messagesList: chat.messagesList}); 
@@ -65,7 +63,7 @@ const Chat = () => {
             id: chat.messagesList.length,
             text: message,
             userId: user.id,
-            timestamp: date.getHours()+ ":" + date.getMinutes()
+            timestamp: date.toString()
         }
         
         list.push(newMessage);
@@ -78,6 +76,10 @@ const Chat = () => {
         setMessage(e.target.value);
     }
 
+    const getHours = (timestamp) => {
+        let date = new Date(timestamp);
+        return date.getHours() + ":" + date.getMinutes();
+    }
 
     useEffect( () => {
         getChat();
@@ -103,7 +105,7 @@ const Chat = () => {
                                         >
                                             <li className={`message ${message.userId === user.id ? "rigth" : "left"}`}>
                                                 {message.text}
-                                                <span className='message-hour'>{message.timestamp}</span>
+                                                <span className='message-hour'>{getHours(message.timestamp)}</span>
                                             </li>
                                         </div>
                                     );

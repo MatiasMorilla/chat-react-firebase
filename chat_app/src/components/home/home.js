@@ -7,7 +7,7 @@ import { Link } from 'react-router-dom';
 
 
 const Home = () => {
-    const {user} = useContext(UserContext);
+  const {user, deleteFriend} = useContext(UserContext);
 
   return (
     <div className="home-container">
@@ -20,7 +20,7 @@ const Home = () => {
                   key={friend.id} 
                   className="home-link"
                 >
-                    <ItemFriend  className={"home-itemFriend"} name={friend.name} />
+                    <ItemFriend  className={"home-itemFriend"} name={friend.name} deleteFriend={deleteFriend}/>
                 </Link>
               );
             })
