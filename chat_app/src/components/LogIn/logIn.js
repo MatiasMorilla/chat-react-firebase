@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useState } from 'react';
 //Components
 import './logIn.css';
 import { Link, Navigate } from 'react-router-dom';
@@ -43,7 +43,6 @@ function LogIn() {
                     value={userName}
                     onChange={handleSetName}
                     variant="standard"
-                    id="standard-basic"
                 />
             </div>
             <div className='input-container'>
@@ -55,7 +54,6 @@ function LogIn() {
                     value={userPassword}
                     onChange={handleSetPassword}
                     variant="standard"
-                    id="standard-basic"
                 />
             </div>
             <div className='links-container'>

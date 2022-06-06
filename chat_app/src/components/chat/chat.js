@@ -7,9 +7,9 @@ import { Button } from '@mui/material';
 import SendIcon from '@mui/icons-material/Send';
 import { useContext, useEffect, useState } from 'react';
 // Firebase
-import { doc, collection, getDocs, query, updateDoc, where, Timestamp } from 'firebase/firestore';
+import { doc, collection, getDocs, query, updateDoc, where } from 'firebase/firestore';
 import db from '../../fireBase';
-import { getDatabase, onValue, ref, update, set } from 'firebase/database';
+import { getDatabase, onValue, ref, update } from 'firebase/database';
 // Context
 import UserContext from '../context/userProvider';
 
@@ -92,10 +92,10 @@ const Chat = () => {
             <div className='chat'>
                 <ul>
                     {
-                        messagesListRT !=  null ?
+                        messagesListRT !==  null ?
                         (
 
-                            messagesListRT.messagesList != undefined &&
+                            messagesListRT.messagesList !== undefined &&
                             (
                                 messagesListRT.messagesList.map( (message, index) => {
                                     return(

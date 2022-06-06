@@ -1,5 +1,5 @@
 import "./SignIn.css";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useState } from "react";
 import { Navigate } from "react-router";
 // Context
 import UserContext from "../context/userProvider";
@@ -43,7 +43,6 @@ const SignIn = () => {
                         value={userName}
                         onChange={handleSetName}
                         variant="standard"
-                        id="standard-basic"
                     />
                 </div>
                 <div className='input-container'>
@@ -55,7 +54,6 @@ const SignIn = () => {
                         value={userPassword}
                         onChange={handleSetPassword}
                         variant="standard"
-                        id="standard-basic"
                     />
                 </div>
                 <div className='links-container'>

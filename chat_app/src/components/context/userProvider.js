@@ -27,9 +27,10 @@ const UserProvider = ({children}) => {
 
     // Agrega un usuario a la base de datos
     const addUser = async (userName, userPassword, friendsList = []) => {
-        searchUser(userName);
+        let q = query(userRef, where("name", "==", userName));
+        let snapshoot = await getDocs(q);
 
-        if(!existUser)
+        if(snapshoot.empty)
         {
             const docRef = await addDoc(userRef,{
                 name: userName,
