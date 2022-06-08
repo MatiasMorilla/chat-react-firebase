@@ -13,6 +13,7 @@ import { getDatabase, onValue, ref, update } from 'firebase/database';
 // Context
 import UserContext from '../context/userProvider';
 
+
 const Chat = () => {
     const {friendName} = useParams();
     const {user, getUserFriend} = useContext(UserContext);
@@ -70,6 +71,7 @@ const Chat = () => {
         setChat({id: chat.id, users: [chat.users[0], chat.users[1]], messagesList: list});
         updateChatFirebase();
         setMessage("");
+        
     }
 
     const handleMessage = (e) => {
@@ -137,6 +139,7 @@ const Chat = () => {
                     placeholder='Escribe un mensaje aqui'
                     value={message}
                     onChange={handleMessage}
+                    autoFocus={true}
                 />
                 <Button type='submit'>
                     <SendIcon />

@@ -8,6 +8,7 @@ import { Button, TextField } from '@mui/material';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import LockIcon from '@mui/icons-material/Lock';
 
+
 function LogIn() {
     const {validateUser, validDataLI} = useContext(UserContext);
     const [userName, setUserName] = useState("");
@@ -43,6 +44,7 @@ function LogIn() {
                     value={userName}
                     onChange={handleSetName}
                     variant="standard"
+                    autoFocus={true}
                 />
             </div>
             <div className='input-container'>

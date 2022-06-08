@@ -7,6 +7,8 @@ import UserContext from "../context/userProvider";
 import { Button, TextField } from "@mui/material";
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import LockIcon from '@mui/icons-material/Lock';
+// crypt
+const CryptoJs = require("crypto-js");
 
 const SignIn = () => {
     const [userName, setUserName] = useState("");
@@ -24,7 +26,8 @@ const SignIn = () => {
 
     const handleAddUser = async (e) => {
         e.preventDefault();
-        addUser(userName, userPassword);
+        let encryptedPassword = CryptoJs.AES.encrypt(userPassword, userPassword).toString();
+        addUser(userName, encryptedPassword);
     }
 
 
@@ -43,6 +46,7 @@ const SignIn = () => {
                         value={userName}
                         onChange={handleSetName}
                         variant="standard"
+                        autoFocus={true}
                     />
                 </div>
                 <div className='input-container'>

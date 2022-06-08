@@ -3,6 +3,8 @@ import { createContext, useState } from "react";
 import { collection, query, where, getDocs, addDoc, updateDoc, doc, deleteDoc, getDoc} from 'firebase/firestore';
 import db from '../../fireBase';
 import { getDatabase, set, ref, update, remove  } from "firebase/database";
+// crypt
+const CryptoJs = require("crypto-js");
 
 const UserContext = createContext();
 
@@ -68,18 +70,28 @@ const UserProvider = ({children}) => {
 
     // Valida que el nombre y la contraseña sean correctos
     const validateUser = async (userName, userPassword) => {
-        const q =  query(userRef, where("name", "==", userName), where("password", "==", userPassword));
+        const q =  query(userRef, where("name", "==", userName));
         
         const snapshoot = await getDocs(q);
-        
+
         if(snapshoot.empty === false)
         {
             snapshoot.forEach( (doc) => {
-              setUser(doc.data());
-              console.log(doc.data());
-            });
-            
-            setValidDataLI(true)
+                let bytesPassword = CryptoJs.AES.decrypt(doc.data().password, userPassword);
+                let passwordDecrypted = bytesPassword.toString(CryptoJs.enc.Utf8);
+
+                if(userPassword === passwordDecrypted)
+                {
+                    setUser(doc.data());
+                    console.log(doc.data());
+                    setValidDataLI(true);
+                }
+                else
+                {
+                    console.log("Los datos son incorrectos");
+                    setValidDataLI(false);
+                }
+            });     
         }
         else
         {
