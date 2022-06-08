@@ -1,15 +1,65 @@
 .itemFriend-container{
+    margin: 20px;
     display: flex;
     flex-direction: column;
+    box-shadow: 0px 3px 1px -2px rgb(0 0 0 / 20%), 0px 2px 2px 0px rgb(0 0 0 / 14%), 0px 1px 5px 0px rgb(0 0 0 / 12%);
 }
 
 .itemFriend-container .user-info{
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
     padding: 10px 20px;
+    display: grid;
+    grid-template-columns: 3fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    grid-template-areas: "name date"
+                         "lastMsg btn";
+}
+
+.itemFriend-container .user-info.addFriend{
+    grid-template-columns: 3fr 1fr;
+    grid-template-rows: 1fr ;
+    grid-template-areas: "name btn";
 }
 
 .itemFriend-container.added{
    display: none;
 }
+
+.itemFriend-container.deleted{
+    display: none;
+ }
+
+.user-info p{
+    margin: 0;
+    padding: 0;
+    color:#000;
+}
+
+.user-info .name{
+    grid-area: name;
+}
+
+.user-info .date{
+    grid-area:date;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.user-info .lastMsg{
+    grid-area: lastMsg;
+    color:#7b7b7b;
+}
+
+.user-info .itemFriend-btn{
+    grid-area: btn;
+    background: #eee;
+}
+
+.user-info .itemFriend-btn.grey{
+    color: #606060;
+}
+
+.user-info .itemFriend-btn.green{
+    color: #37c233;
+}
+

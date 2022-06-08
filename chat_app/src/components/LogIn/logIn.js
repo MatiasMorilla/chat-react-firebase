@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useState } from 'react';
 //Components
 import './logIn.css';
 import { Link, Navigate } from 'react-router-dom';
@@ -7,6 +7,7 @@ import UserContext from '../context/userProvider';
 import { Button, TextField } from '@mui/material';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import LockIcon from '@mui/icons-material/Lock';
+
 
 function LogIn() {
     const {validateUser, validDataLI} = useContext(UserContext);
@@ -43,7 +44,7 @@ function LogIn() {
                     value={userName}
                     onChange={handleSetName}
                     variant="standard"
-                    id="standard-basic"
+                    autoFocus={true}
                 />
             </div>
             <div className='input-container'>
@@ -55,7 +56,6 @@ function LogIn() {
                     value={userPassword}
                     onChange={handleSetPassword}
                     variant="standard"
-                    id="standard-basic"
                 />
             </div>
             <div className='links-container'>

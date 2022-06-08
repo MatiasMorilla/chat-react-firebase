@@ -1,7 +1,10 @@
 import { createContext, useState } from "react";
 // Firebase
-import { collection, query, where, getDocs, addDoc, updateDoc, doc} from 'firebase/firestore';
-import db from '../../fireBase';;
+import { collection, query, where, getDocs, addDoc, updateDoc, doc, deleteDoc, getDoc} from 'firebase/firestore';
+import db from '../../fireBase';
+import { getDatabase, set, ref, update, remove  } from "firebase/database";
+// crypt
+const CryptoJs = require("crypto-js");
 
 const UserContext = createContext();
 
@@ -12,6 +15,7 @@ const UserProvider = ({children}) => {
     const [validDataLI, setValidDataLI] = useState(false);
     const [userList, setUserList] = useState([]);
     const userRef = collection(db, "User");
+    const databaseRT = getDatabase();
 
     // Busca un usuario a traves del su nombre y luego setea 
     // una variable de estado en true o false dependiendo si existe o no
@@ -25,9 +29,10 @@ const UserProvider = ({children}) => {
 
     // Agrega un usuario a la base de datos
     const addUser = async (userName, userPassword, friendsList = []) => {
-        searchUser(userName);
+        let q = query(userRef, where("name", "==", userName));
+        let snapshoot = await getDocs(q);
 
-        if(!existUser)
+        if(snapshoot.empty)
         {
             const docRef = await addDoc(userRef,{
                 name: userName,
@@ -65,18 +70,28 @@ const UserProvider = ({children}) => {
 
     // Valida que el nombre y la contraseña sean correctos
     const validateUser = async (userName, userPassword) => {
-        const q =  query(userRef, where("name", "==", userName), where("password", "==", userPassword));
+        const q =  query(userRef, where("name", "==", userName));
         
         const snapshoot = await getDocs(q);
-        
+
         if(snapshoot.empty === false)
         {
             snapshoot.forEach( (doc) => {
-              setUser(doc.data());
-              console.log(doc.data());
-            });
-            
-            setValidDataLI(true)
+                let bytesPassword = CryptoJs.AES.decrypt(doc.data().password, userPassword);
+                let passwordDecrypted = bytesPassword.toString(CryptoJs.enc.Utf8);
+
+                if(userPassword === passwordDecrypted)
+                {
+                    setUser(doc.data());
+                    console.log(doc.data());
+                    setValidDataLI(true);
+                }
+                else
+                {
+                    console.log("Los datos son incorrectos");
+                    setValidDataLI(false);
+                }
+            });     
         }
         else
         {
@@ -116,9 +131,11 @@ const UserProvider = ({children}) => {
             users: [idUser1, idUser2],
             messagesList: []
         })
-
+        updateDoc(docRef, {id: docRef.id});
+        set(ref(databaseRT,"members/" + docRef.id ), {idUser1: {id: idUser1, state: true}, idUser2: {id: idUser2, state: true}});
         console.log("funciono", docRef.id);
     }
+
 
     // Obtiene todos los usuarios de la bd
     const getUsers = async () => {
@@ -163,6 +180,50 @@ const UserProvider = ({children}) => {
         return exist;
     }
 
+    //Elimina a un amigo de la lista de amigos y borra el chat
+    const deleteFriend = async (userFriend) => {
+        let userRef = doc(db, "User", userFriend.id);
+        let snapshoot = await getDoc(userRef);
+        userFriend = snapshoot.data(); // Obtengo al usuario amigo con todos sus datos
+        
+        user.friendsList = removeFriend(user, userFriend.name); // Elimino al amigo de la lista de amigos
+        userFriend.friendsList = removeFriend(userFriend, user.name);
+
+        let userActualref = doc(db, "User", user.id); // Obtengo las referencias de los usuarios
+        let friendRef = doc(db, "User", userFriend.id);
+        updateDoc(userActualref, {friendsList: user.friendsList}); // Hago update en la bd con la nueva lista de amigos
+        updateDoc(friendRef, {friendsList: userFriend.friendsList});
+
+
+        let chatsRef = collection(db, "Chats"); 
+        let q = query(chatsRef, where("users", "array-contains", user.id)); 
+        let snapshoot2 = await getDocs(q);
+        snapshoot2.forEach( (document) => {
+            if(document.data().users.includes(userFriend.id)) // Obtengo el chat entre los dos usuarios
+            {
+                deleteDoc(doc(db, "Chats", document.data().id)); // Elimno el chat desde la bd
+                remove(ref(databaseRT, "chat/" + document.data().id)); // elimino el chat desde la bd real time
+                remove(ref(databaseRT, "members/" + document.data().id));
+                remove(ref(databaseRT, "messages/" + document.data().id));
+            }
+        });
+        
+    }
+
+    // Remueve a un amigo de la lista de amigos
+    const removeFriend = (user, friendName) => {
+
+        for(let i = 0; i < user.friendsList.length; i++)
+        {
+            if(user.friendsList[i].name === friendName)
+            {
+                user.friendsList.splice(i, 1);
+            }
+        }
+        
+        return user.friendsList;
+    }
+
     const data = {
         user,
         setUser,
@@ -176,7 +237,8 @@ const UserProvider = ({children}) => {
         addFriend,
         getUsers,
         getUsersWithoutAUF,
-        userList
+        userList,
+        deleteFriend
     }
 
     return(
