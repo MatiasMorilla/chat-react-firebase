@@ -202,7 +202,7 @@ const UserProvider = ({children}) => {
             if(document.data().users.includes(userFriend.id)) // Obtengo el chat entre los dos usuarios
             {
                 deleteDoc(doc(db, "Chats", document.data().id)); // Elimno el chat desde la bd
-                remove(ref(databaseRT, "chat/" + document.data().id)); // elimino el chat desde la bd real time
+                remove(ref(databaseRT, "chats/" + document.data().id)); // elimino el chat desde la bd real time
                 remove(ref(databaseRT, "members/" + document.data().id));
                 remove(ref(databaseRT, "messages/" + document.data().id));
             }
