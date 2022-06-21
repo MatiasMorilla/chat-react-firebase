@@ -161,7 +161,7 @@ const UserProvider = ({children}) => {
             }
         });
         
-        setUserList(arrayPersons);
+        return arrayPersons;
       }
 
     // Comprueba si existe un usuario en la lista de amigos a traves de su nombre
@@ -238,6 +238,7 @@ const UserProvider = ({children}) => {
         getUsers,
         getUsersWithoutAUF,
         userList,
+        setUserList,
         deleteFriend
     }
 

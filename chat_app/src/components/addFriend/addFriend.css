@@ -1,0 +1,21 @@
+.search-container{
+    padding: 5px 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-bottom: 1px solid #ccc;
+}
+
+.search-container .search-input{
+    flex: 1;
+    margin-left: 1em;
+}
+
+.search-container .search-icon{
+    padding: 10px;
+    color: #8e8e8e;
+}
+
+.search-container .search-divider{
+    height: 2px;
+}
