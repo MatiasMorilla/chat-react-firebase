@@ -12,7 +12,7 @@ const HeaderApp = ({arrow_path, title}) => {
   return (
     <div className="home-container">
         <div className="home-header">
-            <Button>
+            <Button className="header-btn">
               <Link to={arrow_path} className="header-arrow">
                 <ArrowBackIosIcon fontSize="small"/>
               </Link>

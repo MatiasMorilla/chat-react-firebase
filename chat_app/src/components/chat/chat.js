@@ -14,10 +14,11 @@ import { getDatabase, onValue, ref, update } from 'firebase/database';
 import UserContext from '../context/userProvider';
 
 
-const Chat = () => {
+const Chat = ({friendNameDesktop = null}) => {
     const {friendName} = useParams();
     const {user, getUserFriend} = useContext(UserContext);
-    const userFriend = getUserFriend(friendName);
+    // Cuando el usuario esta en desktop el chat que se abre va a ser el primero de la lista y se envia or parametro
+    const userFriend = friendName === undefined ? friendNameDesktop : getUserFriend(friendName); 
     const [chat, setChat] = useState({id: "", users: [], messagesList: []})
     const [messagesListRT, setMessageListRT] = useState([]);
     const [message, setMessage] = useState("");
@@ -86,11 +87,11 @@ const Chat = () => {
     useEffect( () => {
         getChat();
         console.log("ca")
-    }, [message]); 
+    }, [message, userFriend]); 
 
     return (
         <div className='chat-container'>
-            <HeaderApp arrow_path={"/home"} title={friendName} />
+            <HeaderApp arrow_path={"/home"} title={userFriend.name} />
             <div className='chat'>
                 <ul>
                     {

@@ -3,9 +3,12 @@
     height: 90vh;
 }
 
+.chat-container .home-header{
+    border-right: none;
+}
+
 .chat-container .chat{
     grid-area: chat;
-    background: #fff;
     transform: translateY(-10px);
     height: 100%;
     overflow-y: scroll;
@@ -99,3 +102,21 @@
     z-index: 1;
 }
 
+@media screen and (min-width: 800px) {
+    .chat-container .chat-form{
+        width: 75%;
+        position: absolute;
+        bottom: 0;
+        left: auto;
+        right: 0;
+    }
+
+    .chat-container .home-header{
+        justify-content: center;
+    }    
+
+    .chat-container .header-btn{
+        display: none;
+    }
+    
+}

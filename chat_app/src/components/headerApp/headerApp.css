@@ -9,6 +9,7 @@
 
 .header-title{
     margin: 0;
+    padding: 6px 8px;
 }
 
 .home-header .header-plus,
@@ -18,4 +19,11 @@
     display: flex;
     justify-content: center;
     align-items: center;
+}
+
+
+@media screen and (min-width : 800px) {
+    .home-header{
+        border-right: 1px solid #787878;
+    }
 }

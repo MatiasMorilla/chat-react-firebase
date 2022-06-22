@@ -1,0 +1,32 @@
+.homeDesktop-container{
+    display: grid;
+    grid-template-columns: 1fr 3fr;
+    grid-template-rows: 50px 100%;
+    grid-template-areas: "headerChats chat"
+                         "friends chat";
+}
+
+.homeDesktop-headerChats{
+    grid-area: headerChats;
+    border-right: 1px solid #787878;
+}
+
+.home-header{
+}
+
+.homeDesktop-friends{
+    grid-area: friends;
+}
+
+.homeDesktop-friends .homeDesktop-link{
+    text-decoration: none;
+}
+
+.homeDesktop-chat{
+    grid-area: chat;
+}
+
+.homeDesktop-chat .chat-container .chat-form{
+    right: 0;
+    width: 75%;
+}
