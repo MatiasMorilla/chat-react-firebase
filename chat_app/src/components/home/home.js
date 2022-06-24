@@ -10,8 +10,7 @@ import { InputBase } from '@mui/material';
 const Home = () => {
     const {user, deleteFriend, setValidDataLI} = useContext(UserContext);
     const [searchValue, setSearchValue] = useState("");
-    const [usersList, setUsersList] = useState(user.friendsList);
-    console.log(usersList)
+    const [friendsList, setFriendsList] = useState([]);
 
     const handleSearch = (e) => {
         setSearchValue(e.target.value);
@@ -20,18 +19,22 @@ const Home = () => {
     const handleResertValidDataLI = () => {
       setValidDataLI(false)
     }
+
+    const filterFriends = (userFriendsList) => {
+
+        if(searchValue === "")
+        {
+            setFriendsList(userFriendsList)
+        }
+        else
+        {
+          setFriendsList(userFriendsList.filter( person => person.name.toLowerCase().includes(searchValue.toLowerCase()))) ;
+        }
+    }
     
     useEffect( () => {
-      handleResertValidDataLI()
-      if(searchValue === "")
-      {
-          setUsersList(user.friendList);
-      }
-      else
-      {
-          setUsersList(user.friendList.filter( person => person.name.toLowerCase().includes(searchValue.toLowerCase())));
-      }
-
+        handleResertValidDataLI()
+        filterFriends(user.friendsList)
     }, [searchValue]);
 
 
@@ -47,7 +50,7 @@ const Home = () => {
                 />
           </div>
           {
-              user.friendsList.map( (friend) => {
+              friendsList.map( (friend) => {
                 return(
                   <Link 
                     to={`/chat/${friend.name}`}
