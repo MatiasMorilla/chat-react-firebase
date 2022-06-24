@@ -5,8 +5,6 @@ import HeaderApp from '../headerApp/headerApp';
 import PersonsList from '../personList/personsList';
 // MUI 
 import InputBase from '@mui/material/InputBase';
-import IconButton from '@mui/material/IconButton';
-import SearchIcon from '@mui/icons-material/Search';
 // CONTEXT
 import UserContext from '../context/userProvider';
 
