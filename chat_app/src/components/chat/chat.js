@@ -91,7 +91,7 @@ const Chat = ({friendNameDesktop = null}) => {
 
     return (
         <div className='chat-container'>
-            <HeaderApp arrow_path={"/home"} title={userFriend.name} />
+            <HeaderApp arrow_path={"/home"} title={userFriend !== null ? userFriend.name : "Agrega a un amigo para chatear!" } />
             <div className='chat'>
                 <ul>
                     {
@@ -141,6 +141,7 @@ const Chat = ({friendNameDesktop = null}) => {
                     value={message}
                     onChange={handleMessage}
                     autoFocus={true}
+                    disabled={userFriend === null && true}
                 />
                 <Button type='submit'>
                     <SendIcon />

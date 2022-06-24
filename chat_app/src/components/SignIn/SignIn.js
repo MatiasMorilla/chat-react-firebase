@@ -4,7 +4,7 @@ import { Navigate } from "react-router";
 // Context
 import UserContext from "../context/userProvider";
 // MUI
-import { Button, TextField } from "@mui/material";
+import { Alert, Button, Snackbar, TextField } from "@mui/material";
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import LockIcon from '@mui/icons-material/Lock';
 // crypt
@@ -13,7 +13,9 @@ const CryptoJs = require("crypto-js");
 const SignIn = () => {
     const [userName, setUserName] = useState("");
     const [userPassword, setUserPassword] = useState("");
-    const {addUser, validDataSI} = useContext(UserContext);
+    const {addUser, validDataSI, openErrorAlert, setOpenErrorAlert, errorMessage, setErrorMessage} = useContext(UserContext);
+    const vertical = "bottom";
+    const horizontal = "center";
 
     const handleSetName = (e) => {
         setUserName(e.target.value);
@@ -23,11 +25,28 @@ const SignIn = () => {
         setUserPassword(e.target.value);
     }
 
+    const handleCloseErrorAlert = (event, reason) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+
+        setOpenErrorAlert(false)
+    } 
 
     const handleAddUser = async (e) => {
         e.preventDefault();
-        let encryptedPassword = CryptoJs.AES.encrypt(userPassword, userPassword).toString();
-        addUser(userName, encryptedPassword);
+
+        if(userName.length !== 0 && userPassword.length !== 0)
+        {
+            let encryptedPassword = CryptoJs.AES.encrypt(userPassword, userPassword).toString();
+            addUser(userName, encryptedPassword);
+        }
+        else
+        {
+            setErrorMessage("Debes completar todos los campos!");
+            setOpenErrorAlert(true);
+        }
+
     }
 
 
@@ -65,6 +84,16 @@ const SignIn = () => {
                         Enviar
                     </Button>
                 </div>
+                <Snackbar 
+                    open={openErrorAlert} 
+                    autoHideDuration={6000} 
+                    onClose={handleCloseErrorAlert}
+                    anchorOrigin={{ vertical, horizontal }}
+                >
+                        <Alert onClose={handleCloseErrorAlert} severity="error">
+                            {errorMessage}
+                        </Alert>
+                </Snackbar>
             </form>
         </div>
     );

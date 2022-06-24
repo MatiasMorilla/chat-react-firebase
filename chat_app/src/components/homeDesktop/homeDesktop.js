@@ -7,8 +7,16 @@ import { Link } from 'react-router-dom';
 import Chat from '../chat/chat';
 
 const HomeDesktop = () => {
-  const {user, deleteFriend} = useContext(UserContext);
+  const {user, deleteFriend, setValidDataLI} = useContext(UserContext);
   const [userFriend, setUserFriend] = useState(user.friendsList[0]);
+
+  const handleResertValidDataLI = () => {
+    setValidDataLI(false)
+  }
+  
+  useEffect( () => {
+    handleResertValidDataLI()
+  }, []);
 
   return (
     <div className="homeDesktop-container">

@@ -14,6 +14,9 @@ const UserProvider = ({children}) => {
     const [validDataSI, setValidDataSI] = useState(false);
     const [validDataLI, setValidDataLI] = useState(false);
     const [userList, setUserList] = useState([]);
+    const [openSuccessAlert, setOpenSuccessAlert] = useState(false);
+    const [openErrorAlert, setOpenErrorAlert] = useState(false);
+    const [errorMessage, setErrorMessage] = useState("");
     const userRef = collection(db, "User");
     const databaseRT = getDatabase();
 
@@ -42,13 +45,14 @@ const UserProvider = ({children}) => {
 
             updateDoc(docRef, {id: docRef.id});
 
+            setOpenSuccessAlert(true);
             setValidDataSI(true);
-            console.log("funciono", docRef.id);
         }
         else
         {
+            setErrorMessage("Lo siento! Ese usuario ya existe, intenta con otro.")
+            setOpenErrorAlert(true);
             setValidDataSI(false);    
-            console.log("Ese usuario ya existe");
         }
 
     }
@@ -88,14 +92,16 @@ const UserProvider = ({children}) => {
                 }
                 else
                 {
-                    console.log("Los datos son incorrectos");
+                    setErrorMessage("Los datos son incorrectos!");
+                    setOpenErrorAlert(true);
                     setValidDataLI(false);
                 }
             });     
         }
         else
         {
-            console.log("Los datos son incorrectos");
+            setErrorMessage("Los datos son incorrectos!");
+            setOpenErrorAlert(true);
             setValidDataLI(false);
         }
     }
@@ -229,7 +235,9 @@ const UserProvider = ({children}) => {
         setUser,
         existUser,
         validDataSI,
+        setValidDataSI,
         validDataLI,
+        setValidDataLI,
         searchUser,
         addUser,
         getUserFriend,
@@ -239,7 +247,13 @@ const UserProvider = ({children}) => {
         getUsersWithoutAUF,
         userList,
         setUserList,
-        deleteFriend
+        deleteFriend,
+        openSuccessAlert,
+        setOpenSuccessAlert,
+        openErrorAlert,
+        setOpenErrorAlert,
+        errorMessage,
+        setErrorMessage
     }
 
     return(
