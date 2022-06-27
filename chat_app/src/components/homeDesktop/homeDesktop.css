@@ -1,9 +1,12 @@
 .homeDesktop-container{
     display: grid;
     grid-template-columns: 1fr 3fr;
-    grid-template-rows: 50px 100%;
+    grid-template-rows: 50px 50px 100%;
     grid-template-areas: "headerChats chat"
+                         "searchInput chat"
                          "friends chat";
+    max-height: 100vh;
+    overflow: hidden;
 }
 
 .homeDesktop-headerChats{
@@ -11,9 +14,14 @@
     border-right: 1px solid #787878;
 }
 
+.search-container{
+    grid-area: searchInput;
+}
+
 
 .homeDesktop-friends{
     grid-area: friends;
+    overflow-y: scroll;
 }
 
 .homeDesktop-friends .homeDesktop-link{

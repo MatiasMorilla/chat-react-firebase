@@ -87,7 +87,6 @@ const UserProvider = ({children}) => {
                 if(userPassword === passwordDecrypted)
                 {
                     setUser(doc.data());
-                    console.log(doc.data());
                     setValidDataLI(true);
                 }
                 else
@@ -139,7 +138,6 @@ const UserProvider = ({children}) => {
         })
         updateDoc(docRef, {id: docRef.id});
         set(ref(databaseRT,"members/" + docRef.id ), {idUser1: {id: idUser1, state: true}, idUser2: {id: idUser2, state: true}});
-        console.log("funciono", docRef.id);
     }
 
 

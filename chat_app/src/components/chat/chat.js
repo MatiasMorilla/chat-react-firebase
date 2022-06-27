@@ -86,7 +86,6 @@ const Chat = ({friendNameDesktop = null}) => {
 
     useEffect( () => {
         getChat();
-        console.log("ca")
     }, [message, userFriend]); 
 
     return (
