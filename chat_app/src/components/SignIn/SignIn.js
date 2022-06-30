@@ -4,7 +4,7 @@ import { Navigate } from "react-router";
 // Context
 import UserContext from "../context/userProvider";
 // MUI
-import { Alert, Button, Snackbar, TextField } from "@mui/material";
+import { Alert, Button, Link, Snackbar, TextField } from "@mui/material";
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import LockIcon from '@mui/icons-material/Lock';
 // crypt
@@ -80,6 +80,11 @@ const SignIn = () => {
                     />
                 </div>
                 <div className='links-container'>
+                    <Button  variant='contained'>
+                        <Link to={'/'} href="/">
+                            Volver
+                        </Link>
+                    </Button>
                     <Button type="submit" variant='contained'>
                         Enviar
                     </Button>

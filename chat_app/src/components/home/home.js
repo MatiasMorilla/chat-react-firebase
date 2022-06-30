@@ -3,7 +3,7 @@ import { useContext, useEffect, useState } from "react";
 import UserContext from "../context/userProvider";
 import HeaderApp from '../headerApp/headerApp';
 import ItemFriend from '../itemFriend/itemFriend';
-import { Link } from 'react-router-dom';
+import { Link, Navigate } from 'react-router-dom';
 import { InputBase } from '@mui/material';
 
 

@@ -1,6 +1,6 @@
 import './chat.css';
 // Router
-import { useParams } from 'react-router';
+import { Navigate, useParams } from 'react-router';
 import HeaderApp from '../headerApp/headerApp';
 // MUI
 import { Button } from '@mui/material';
@@ -142,7 +142,10 @@ const Chat = ({friendNameDesktop = null}) => {
                     autoFocus={true}
                     disabled={userFriend === null && true}
                 />
-                <Button type='submit'>
+                <Button 
+                    type='submit'
+                    disabled={message === "" ? true : false}
+                >
                     <SendIcon />
                 </Button>
             </form>

@@ -8,6 +8,7 @@ import ItemFriend from '../itemFriend/itemFriend';
 import Chat from '../chat/chat';
 // MUI
 import { InputBase } from '@mui/material';
+import { Navigate } from 'react-router';
 
 const HomeDesktop = () => {
   const {user, deleteFriend, setValidDataLI} = useContext(UserContext);

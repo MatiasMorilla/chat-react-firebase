@@ -20,7 +20,7 @@ function AppRouter() {
             <Route path='/Home' element={windowsWidth >= 800 ? <HomeDesktop /> : <Home />} />
             <Route path='/SignIn' element={<SignIn />} />
             <Route path='/addFriend' element={<AddFriend />} />
-            <Route path='/chat/:friendName' element={<Chat />} />
+            <Route path='/chat/:friendName' element={windowsWidth >= 800 ? <HomeDesktop /> : <Chat />} />
             <Route path='/' element={<LogIn />}/>
         </Routes>
     </BrowserRouter>  
