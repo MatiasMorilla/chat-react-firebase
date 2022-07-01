@@ -31,10 +31,25 @@ const Home = () => {
           setFriendsList(userFriendsList.filter( person => person.name.toLowerCase().includes(searchValue.toLowerCase()))) ;
         }
     }
+
+    const getMostRecentChat = (user, userFriend, timestamp) => {
+        let arrayFriends = [];
+        let todayDate = new Date();
+        let chatDate = new Date(timestamp);
+
+        if(arrayFriends.length === 0)
+        {
+            arrayFriends.push({userName: user.name, friendName: userFriend.name, timestamp: timestamp});
+        }
+        else
+        {
+            /// seguir con la funcion
+        }
+    }
     
     useEffect( () => {
-        handleResertValidDataLI()
-        filterFriends(user.friendsList)
+        handleResertValidDataLI();
+        filterFriends(user.friendsList);
     }, [searchValue]);
 
 

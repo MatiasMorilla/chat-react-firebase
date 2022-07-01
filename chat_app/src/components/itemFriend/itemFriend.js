@@ -7,7 +7,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import AddIcon from '@mui/icons-material/Add';
 // Firestore
 import { collection, getDocs, query, where } from 'firebase/firestore';
-import { getDatabase, onValue, ref } from 'firebase/database';
+import { get, getDatabase, onValue, ref } from 'firebase/database';
 import db from '../../fireBase';
 // Context
 import UserContext from '../context/userProvider';
@@ -59,16 +59,15 @@ const ItemFriend = ({name, addFriend = null, deleteFriend = null, addOrdelete = 
         let todayDate = new Date();
         let timeText = "";
 
-        if(date.getDate() === todayDate.getDate())
+        if(date.getDate() === todayDate.getDate() && date.getMonth() === todayDate.getMonth())
             timeText = date.getHours() + ":" + date.getMinutes();
-        else if(date.getDate() === todayDate.getDate() -1)
+        else if(date.getDate() === todayDate.getDate() -1 && date.getMonth() === todayDate.getMonth())
             timeText = "Ayer";
-        else if(date.getDate() < todayDate.getDate() - 7)
+        else if(date.getDate() < todayDate.getDate() - 1  && date.getDate() > todayDate.getDate() - 7 && date.getMonth() === todayDate.getMonth() )
+                timeText = getWeekDay(date.getDay());
+        else if(date.getTime() < todayDate.getTime())
             timeText = date.getDate() + "/" + (date.getMonth() + 1) + "/" + date.getFullYear();
-        else if(date.getDate() < todayDate.getDate() - 1)
-            timeText = getWeekDay(date.getDay());
-        
-
+    
         return timeText;
     }
 
@@ -94,7 +93,7 @@ const ItemFriend = ({name, addFriend = null, deleteFriend = null, addOrdelete = 
     }
     
     useEffect( () => {
-        getLastMsg();
+        getLastMsg();      
     }, []);
 
     return (

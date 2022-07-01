@@ -1,17 +1,20 @@
 import './chat.css';
 // Router
-import { Navigate, useParams } from 'react-router';
+import { useParams } from 'react-router';
 import HeaderApp from '../headerApp/headerApp';
+import { useContext, useEffect, useRef, useState } from 'react';
 // MUI
 import { Button } from '@mui/material';
 import SendIcon from '@mui/icons-material/Send';
-import { useContext, useEffect, useState } from 'react';
 // Firebase
 import { doc, collection, getDocs, query, updateDoc, where } from 'firebase/firestore';
 import db from '../../fireBase';
 import { getDatabase, onValue, ref, update } from 'firebase/database';
 // Context
 import UserContext from '../context/userProvider';
+// ScroolFeed
+import SrcollFedd from 'react-scrollable-feed';
+
 
 
 const Chat = ({friendNameDesktop = null}) => {
@@ -23,6 +26,7 @@ const Chat = ({friendNameDesktop = null}) => {
     const [messagesListRT, setMessageListRT] = useState([]);
     const [message, setMessage] = useState("");
     const databaseRT = getDatabase();
+    const [forceScroll, setForceScroll] = useState(false);
 
     // Obtenemos la referencia del chat
     // Y comprobamos que sea el chat de los dos usuarios seleccionados
@@ -72,7 +76,7 @@ const Chat = ({friendNameDesktop = null}) => {
         setChat({id: chat.id, users: [chat.users[0], chat.users[1]], messagesList: list});
         updateChatFirebase();
         setMessage("");
-        
+        setForceScroll(true)
     }
 
     const handleMessage = (e) => {
@@ -88,50 +92,53 @@ const Chat = ({friendNameDesktop = null}) => {
         getChat();
     }, [message, userFriend]); 
 
+
     return (
         <div className='chat-container'>
             <HeaderApp arrow_path={"/home"} title={userFriend !== null ? userFriend.name : "Agrega a un amigo para chatear!" } />
-            <div className='chat'>
-                <ul>
-                    {
-                        messagesListRT !==  null ?
-                        (
-
-                            messagesListRT.messagesList !== undefined &&
+            <div className='chat'> 
+                <SrcollFedd forceScroll={forceScroll && setTimeout(() => setForceScroll(false), 500)}>
+                    <ul>
+                        {
+                            messagesListRT !==  null ?
                             (
-                                messagesListRT.messagesList.map( (message, index) => {
+
+                                messagesListRT.messagesList !== undefined &&
+                                (
+                                    messagesListRT.messagesList.map( (message, index) => {
+                                        return(
+                                            <div 
+                                                className={`li-container ${message.userId === user.id ? "rigth" : ""}`} 
+                                                key={index} 
+                                            >
+                                                <li className={`message ${message.userId === user.id ? "rigth" : "left"}`}>
+                                                    {message.text}
+                                                    <span className='message-hour'>{getHours(message.timestamp)}</span>
+                                                </li>
+                                            </div>
+                                        );
+                                    })
+                                )
+                            )
+                            :
+                            (
+                                chat.messagesList.map( (message, index) => {
                                     return(
                                         <div 
                                             className={`li-container ${message.userId === user.id ? "rigth" : ""}`} 
-                                            key={index} 
+                                            key={index}
                                         >
                                             <li className={`message ${message.userId === user.id ? "rigth" : "left"}`}>
                                                 {message.text}
-                                                <span className='message-hour'>{getHours(message.timestamp)}</span>
+                                                <span className='message-hour'>{message.timestamp}</span>
                                             </li>
                                         </div>
                                     );
                                 })
                             )
-                        )
-                        :
-                        (
-                            chat.messagesList.map( (message, index) => {
-                                return(
-                                    <div 
-                                        className={`li-container ${message.userId === user.id ? "rigth" : ""}`} 
-                                        key={index} 
-                                    >
-                                        <li className={`message ${message.userId === user.id ? "rigth" : "left"}`}>
-                                            {message.text}
-                                            <span className='message-hour'>{message.timestamp}</span>
-                                        </li>
-                                    </div>
-                                );
-                            })
-                        )
-                    }
-                </ul>
+                        }
+                    </ul>
+                </SrcollFedd>
             </div>
             <form className='chat-form' onSubmit={handleOnSubmit}>
                 <input 
