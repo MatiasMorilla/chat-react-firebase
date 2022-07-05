@@ -1,5 +1,5 @@
 import './home.css';
-import { useContext, useEffect, useState } from "react";
+import {useContext, useEffect, useReducer, useState } from "react";
 import UserContext from "../context/userProvider";
 import HeaderApp from '../headerApp/headerApp';
 import ItemFriend from '../itemFriend/itemFriend';
@@ -11,7 +11,7 @@ const Home = () => {
     const {user, deleteFriend, setValidDataLI} = useContext(UserContext);
     const [searchValue, setSearchValue] = useState("");
     const [friendsList, setFriendsList] = useState([]);
-    const [arrayFriends, setaArayFriends] = useState([]);
+    const [any, forceUpdate] = useReducer(num => num + 1, 0);
 
     const handleSearch = (e) => {
         setSearchValue(e.target.value);
@@ -19,6 +19,10 @@ const Home = () => {
 
     const handleResertValidDataLI = () => {
       setValidDataLI(false)
+    }
+
+    function handleChange(){
+      forceUpdate();
     }
 
     const filterFriends = (userFriendsList) => {
@@ -29,11 +33,13 @@ const Home = () => {
         }
         else
         {
-          setFriendsList(userFriendsList.filter( person => person.name.toLowerCase().includes(searchValue.toLowerCase()))) ;
+            setFriendsList(userFriendsList.filter( person => person.name.toLowerCase().includes(searchValue.toLowerCase()))) ;
         }
     }
 
+    // Obtiene los chats desde el itemFriend y le agrega la fecha al friendsList para despues ordenarlo por el mas reciente
     const getMostRecentChat = (friendName, timestamp) => {
+
         friendsList.forEach( (friend, index) => 
         {
             if(friend.name == friendName)
@@ -43,12 +49,13 @@ const Home = () => {
         }); 
 
         friendsList.sort( (a, b) => b.timestamp - a.timestamp);
-    }
-    
+        handleChange();
+      }
+      
     useEffect( () => {
         handleResertValidDataLI();
         filterFriends(user.friendsList);
-    }, [searchValue]);
+    }, [searchValue, friendsList]);
 
     return (
       <div className="home-container">

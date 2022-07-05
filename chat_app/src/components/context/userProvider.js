@@ -84,7 +84,7 @@ const UserProvider = ({children}) => {
                 let bytesPassword = CryptoJs.AES.decrypt(doc.data().password, userPassword);
                 let passwordDecrypted = bytesPassword.toString(CryptoJs.enc.Utf8);
 
-                if(userPassword === passwordDecrypted)
+                if(userPassword === passwordDecrypted && userPassword.length !== 0)
                 {
                     setUser(doc.data());
                     setValidDataLI(true);

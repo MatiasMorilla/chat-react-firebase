@@ -62,7 +62,7 @@ const ItemFriend = ({name, addFriend = null, deleteFriend = null, addOrdelete = 
         let timeText = "";
 
         if(date.getDate() === todayDate.getDate() && date.getMonth() === todayDate.getMonth())
-            timeText = date.getHours() + ":" + date.getMinutes();
+            timeText =`${date.getHours()}:${date.getMinutes() < 10 ? `0${date.getMinutes()}`: date.getMinutes()}`;
         else if(date.getDate() === todayDate.getDate() -1 && date.getMonth() === todayDate.getMonth())
             timeText = "Ayer";
         else if(date.getDate() < todayDate.getDate() - 1  && date.getDate() > todayDate.getDate() - 7 && date.getMonth() === todayDate.getMonth() )

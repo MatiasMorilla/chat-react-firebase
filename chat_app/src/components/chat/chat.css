@@ -67,6 +67,7 @@
     list-style: none;
     border-radius: 5px;
     position: relative;
+    word-break: break-all;
 }
 
 .chat-container .chat .message.left::after{

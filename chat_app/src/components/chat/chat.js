@@ -85,7 +85,7 @@ const Chat = ({friendNameDesktop = null}) => {
 
     const getHours = (timestamp) => {
         let date = new Date(timestamp);
-        return date.getHours() + ":" + date.getMinutes();
+        return `${date.getHours()}:${date.getMinutes() < 10 ? `0${date.getMinutes()}`: date.getMinutes()}`;
     }
 
     useEffect( () => {

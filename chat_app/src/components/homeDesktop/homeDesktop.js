@@ -1,5 +1,5 @@
 import './homeDesktop.css';
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useReducer, useState } from "react";
 // CONTEXT
 import UserContext from "../context/userProvider";
 // COMPONENTS
@@ -8,13 +8,13 @@ import ItemFriend from '../itemFriend/itemFriend';
 import Chat from '../chat/chat';
 // MUI
 import { InputBase } from '@mui/material';
-import { Navigate } from 'react-router';
 
 const HomeDesktop = () => {
   const {user, deleteFriend, setValidDataLI} = useContext(UserContext);
   const [userFriend, setUserFriend] = useState(user.friendsList[0]);
   const [searchValue, setSearchValue] = useState("");
   const [friendsList, setFriendsList] = useState([]);
+  const [any, forceUpdate] = useReducer(num => num + 1, 0);
 
   const handleSearch = (e) => {
       setSearchValue(e.target.value);
@@ -22,6 +22,10 @@ const HomeDesktop = () => {
 
   const handleResertValidDataLI = () => {
     setValidDataLI(false)
+  }
+
+  function handleChange(){
+    forceUpdate();
   }
   
   const filterFriends = (userFriendsList) => {
@@ -34,6 +38,21 @@ const HomeDesktop = () => {
     {
       setFriendsList(userFriendsList.filter( person => person.name.toLowerCase().includes(searchValue.toLowerCase()))) ;
     }
+  }
+
+  // Obtiene los chats desde el itemFriend y le agrega la fecha al friendsList para despues ordenarlo por el mas reciente
+  const getMostRecentChat = (friendName, timestamp) => {
+
+    friendsList.forEach( (friend, index) => 
+    {
+        if(friend.name == friendName)
+        {
+          friendsList[index].timestamp = new Date(timestamp);
+        }  
+    }); 
+
+    friendsList.sort( (a, b) => b.timestamp - a.timestamp);
+    handleChange();
   }
 
   useEffect( () => {
@@ -61,7 +80,12 @@ const HomeDesktop = () => {
                         key={friend.id} 
                         className="homeDesktop-link"
                     >
-                        <ItemFriend  className={"homeDesktop-itemFriend"} name={friend.name} deleteFriend={deleteFriend}/>
+                        <ItemFriend  
+                            className={"homeDesktop-itemFriend"} 
+                            name={friend.name} 
+                            deleteFriend={deleteFriend}
+                            getMostRecentChat={getMostRecentChat}
+                         />
                     </a>
                 );
                 })

@@ -48,6 +48,10 @@
 .user-info .lastMsg{
     grid-area: lastMsg;
     color:#7b7b7b;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    padding-right: 10px;
 }
 
 .user-info .itemFriend-btn{
