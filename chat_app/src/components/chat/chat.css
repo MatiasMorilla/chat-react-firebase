@@ -46,7 +46,7 @@
 }
 
 .chat-container .chat ul div:last-child{
-    margin-bottom: 100px;
+    margin-bottom: 50px;
 }
 
 .li-container{
@@ -119,9 +119,32 @@
     .chat-container .header-btn{
         display: none;
     }
+    
+}
 
+
+@media screen and (-webkit-min-device-pixel-ratio:0) and (min-resolution:.001dpcm) and (max-width: 800px) {
     .chat-container .chat ul div:last-child{
-        margin-bottom: 50px;
+        margin-bottom: 100px;
+    }
+}
+
+@media screen and (min-color-index:0) and(-webkit-min-device-pixel-ratio:0) { 
+    .chat-container .chat{
+        height: 90%;
     }
     
+    .chat-container .chat ul div:last-child{
+        margin-bottom: 30px;
+    }
+}
+
+@media not all and (min-resolution:.001dpcm) { 
+    .chat-container .chat{
+        height: 90%;
+    }
+    
+    .chat-container .chat ul div:last-child{
+        margin-bottom: 30px;
+    }
 }
