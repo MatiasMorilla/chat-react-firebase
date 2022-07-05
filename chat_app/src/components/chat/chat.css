@@ -46,7 +46,7 @@
 }
 
 .chat-container .chat ul div:last-child{
-    margin-bottom: 50px;
+    margin-bottom: 100px;
 }
 
 .li-container{
@@ -118,6 +118,10 @@
 
     .chat-container .header-btn{
         display: none;
+    }
+
+    .chat-container .chat ul div:last-child{
+        margin-bottom: 50px;
     }
     
 }

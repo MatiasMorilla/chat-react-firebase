@@ -36,6 +36,10 @@
 
 .user-info .name{
     grid-area: name;
+    padding-right: 10px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
 }
 
 .user-info .date{
