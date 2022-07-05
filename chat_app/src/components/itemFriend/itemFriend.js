@@ -12,7 +12,7 @@ import db from '../../fireBase';
 // Context
 import UserContext from '../context/userProvider';
 
-const ItemFriend = ({name, addFriend = null, deleteFriend = null, addOrdelete = null}) => {
+const ItemFriend = ({name, addFriend = null, deleteFriend = null, addOrdelete = null, getMostRecentChat = null}) => {
     const {user, getUserFriend} = useContext(UserContext);
     const [addedFriend, setAddedFriend] = useState(false);
     const [deletedFriend, setDeletedFriend] = useState(false);
@@ -43,10 +43,12 @@ const ItemFriend = ({name, addFriend = null, deleteFriend = null, addOrdelete = 
                     {
                         let data = snapshoot.val();
                         setLastMsg({userId: data.userId, lastMessage: data.lastMessage, timestamp: data.timestamp});
+                        getMostRecentChat(userFriend.name, data.timestamp);
                     }
                     else
                     {
                         setLastMsg({userId: "", lastMessage: "", timestamp: ""});
+                        getMostRecentChat(userFriend.name, "-1");
                     }
                     
                 })

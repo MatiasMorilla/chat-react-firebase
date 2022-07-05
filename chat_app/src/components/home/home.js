@@ -11,6 +11,7 @@ const Home = () => {
     const {user, deleteFriend, setValidDataLI} = useContext(UserContext);
     const [searchValue, setSearchValue] = useState("");
     const [friendsList, setFriendsList] = useState([]);
+    const [arrayFriends, setaArayFriends] = useState([]);
 
     const handleSearch = (e) => {
         setSearchValue(e.target.value);
@@ -22,7 +23,7 @@ const Home = () => {
 
     const filterFriends = (userFriendsList) => {
 
-        if(searchValue === "")
+        if(searchValue.length === 0 )
         {
             setFriendsList(userFriendsList)
         }
@@ -32,26 +33,22 @@ const Home = () => {
         }
     }
 
-    const getMostRecentChat = (user, userFriend, timestamp) => {
-        let arrayFriends = [];
-        let todayDate = new Date();
-        let chatDate = new Date(timestamp);
+    const getMostRecentChat = (friendName, timestamp) => {
+        friendsList.forEach( (friend, index) => 
+        {
+            if(friend.name == friendName)
+            {
+              friendsList[index].timestamp = new Date(timestamp);
+            }  
+        }); 
 
-        if(arrayFriends.length === 0)
-        {
-            arrayFriends.push({userName: user.name, friendName: userFriend.name, timestamp: timestamp});
-        }
-        else
-        {
-            /// seguir con la funcion
-        }
+        friendsList.sort( (a, b) => b.timestamp - a.timestamp);
     }
     
     useEffect( () => {
         handleResertValidDataLI();
         filterFriends(user.friendsList);
     }, [searchValue]);
-
 
     return (
       <div className="home-container">
@@ -72,7 +69,12 @@ const Home = () => {
                     key={friend.id} 
                     className="home-link"
                   >
-                      <ItemFriend  className={"home-itemFriend"} name={friend.name} deleteFriend={deleteFriend}/>
+                      <ItemFriend  
+                        className={"home-itemFriend"} 
+                        name={friend.name} 
+                        deleteFriend={deleteFriend}
+                        getMostRecentChat={getMostRecentChat}
+                      />
                   </Link>
                 );
               })
