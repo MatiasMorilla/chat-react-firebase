@@ -13,6 +13,10 @@ Manual de usuario:
 4. Ya en la aplicación debes dirigirte a la parte superior derecha y hacer click en el "+", para poder agregar a otro usuario.
 5. Cuando hayas encontrado al usuario que quieras agregar este aparacera en la pestaña principal y dandole click en su nombre ya podras chatear con el!
 
+Si la página por algún motivo arroja un error es porque Heroku después de un determinado tiempo de inactividad duerme a la aplicación y solo tiene que refrescar la página y estara todo solucionado. :)
+
+Link: https://chat-app-react-firebase.herokuapp.com/
+
 ![login](https://user-images.githubusercontent.com/73543913/177558504-3e59afb2-05da-4cf6-bdcd-491243d192d3.png)
 ![signIn](https://user-images.githubusercontent.com/73543913/177558510-0ab4a95d-9280-450a-8237-31239f46fc07.png)
 ![principalMobile](https://user-images.githubusercontent.com/73543913/177558508-ae45c761-1839-4ecf-912d-b0467b2f6661.png)
